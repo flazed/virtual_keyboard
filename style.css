@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans:700&display=swap');
+
+html, body, .wrapper {
+    padding: 0;
+    margin: 0;
+    background-color: #343434;
+    width: 100%;
+    /* font-family: Roboto,Segoe UI,"Tahoma, sans-serif"; */
+    font-family: 'Noto Sans', sans-serif;
+}
+
+#text {
+    display: block;
+    position: relative;
+    margin: 20px auto;
+    box-sizing: border-box;
+    min-width: 800px;
+    max-width: 800px;
+    min-height: 300px;
+    max-height: 300px;
+    background-color: #262424;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px;
+}
+
+#keyboard {
+    position: relative;
+    width: 704px;
+    margin: 0 auto;
+    transform: translateX(-3px);
+}
+
+.row {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 8px;
+}
+
+.key {
+    float: left;
+    width: 40px;
+    height: 40px;
+    margin-left: 6px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    background: #828282;
+    border-radius: 3px;
+    cursor: pointer;
+    /* user-select: none; */
+    transition: border-radius .3s,background .2s;
+}
+
+.alt, .backspace, .capslock, .control, .del, .enter, .shift-left, .shift-right, .tab, .windows {
+    font-weight: 600;
+    color: #c3c3c3;
+    background-color: #1c232e;
+}
+
+.backspace, .capslock, .shift-left {
+    width: 100px;
+}
+
+.off, .up {
+    display: none;
+}
+
+.arrow {
+    font-weight: 600;
+    color: #c3c3c3;
+    background-color: #4a5970;
+}
+
+.space {
+    width: 330px;
+}
+
+.enter, .shift-right {
+    width: 86px;
+}
+
+.delete {
+    width: 44px;
+}
+
+.tab {
+    width: 50px;
+}
+
+.active {
+    background-color: #5571ee;
+    border-radius: 50px;
+}
+
+.key:hover {
+    background: #585656;
+}
