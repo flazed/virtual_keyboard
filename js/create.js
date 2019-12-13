@@ -22,6 +22,7 @@ kb.id = 'keyboard'
 page.append(kb);
 
 let keyboard = document.querySelector('#keyboard');
+let textarea = document.querySelector('#text');
 
 // Создание клавиатуры
 for (rows of keys) { // Создание строки
@@ -30,12 +31,13 @@ for (rows of keys) { // Создание строки
     keyboard.append(row);
     let newRow = document.querySelectorAll('.row');
     for(key of rows) { // Создание кнопок в данной строке
+        let button
         if (key[0] == 'key') {
-            let button = document.createElement('div');
+            button = document.createElement('div');
             button.className = 'key';
             newRow[newRow.length-1].append(button); 
         } else {
-            let button = document.createElement('div');
+            button = document.createElement('div');
             button.className = 'key '+key[0];
             newRow[newRow.length-1].append(button);
         }
@@ -49,15 +51,14 @@ for (rows of keys) { // Создание строки
             }
             newKey[newKey.length-1].append(keySpan);
         }
-        spanInner(key);
+        spanInner(button, key);
     }
 }
 
-function spanInner(spanName) { // Заполнение кнопок
+function spanInner(button, spanName) { // Заполнение кнопок
     let span = document.querySelectorAll('.'+spanName[1]);
     let langCount = 1;
     for(elem of span) {
-        let keyInnerSpan = document.createElement('span');
         for(let k = 0; k < 2; k++) {
             let keyInnerSpan = document.createElement('span');            
             if(k == 0) {
@@ -67,6 +68,9 @@ function spanInner(spanName) { // Заполнение кнопок
                 keyInnerSpan.className = 'up';
                 keyInnerSpan.innerHTML = key[2*langCount+1];
             }
+            button.onclick = function() { 
+                clk(span);
+            }
             elem.append(keyInnerSpan);
         }
         langCount++;
@@ -74,5 +78,15 @@ function spanInner(spanName) { // Заполнение кнопок
 }
 
 function clk(key) {
-
+    key[0].parentNode.classList.add('active');
+    for(child of key) {
+        if(child.classList.contains('on')) {
+            for(innerChild of child.childNodes) {
+                if(innerChild.classList.contains('down')) {
+                    textarea.value = textarea.value + innerChild.innerHTML;
+                }
+            }
+        }
+    }
+    setTimeout(() => key[0].parentNode.classList.remove("active"),350);
 }
