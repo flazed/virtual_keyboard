@@ -57,8 +57,22 @@ for (rows of keys) { // Создание строки
 
 function spanInner(button, spanName) { // Заполнение кнопок
     let span = document.querySelectorAll('.'+spanName[1]);
+    if(!(spanName[1] == 'ShiftLeft' || spanName[1] == 'ShiftRight')) {
+        button.onclick = function() {
+             clk(span); 
+        } 
+    } else {
+        button.addEventListener('mousedown', function(event) {
+            button.classList.add('active');
+            textTransform();
+        });
+        button.addEventListener('mouseup', function(event) {
+            button.classList.remove('active');
+            textTransform();
+        });
+    } 
     let langCount = 1;
-    for(elem of span) {
+    for(elem of span) { 
         for(let k = 0; k < 2; k++) {
             let keyInnerSpan = document.createElement('span');            
             if(k == 0) {
@@ -68,9 +82,6 @@ function spanInner(button, spanName) { // Заполнение кнопок
                 keyInnerSpan.className = 'up';
                 keyInnerSpan.innerHTML = key[2*langCount+1];
             }
-            button.onclick = function() { 
-                clk(span);
-            }
             elem.append(keyInnerSpan);
         }
         langCount++;
@@ -78,15 +89,65 @@ function spanInner(button, spanName) { // Заполнение кнопок
 }
 
 function clk(key) {
-    key[0].parentNode.classList.add('active');
-    for(child of key) {
-        if(child.classList.contains('on')) {
-            for(innerChild of child.childNodes) {
-                if(innerChild.classList.contains('down')) {
-                    textarea.value = textarea.value + innerChild.innerHTML;
+    let pos = textarea.selectionStart;
+    if(key[0].classList[0] == 'CapsLock') {
+        if(key[0].parentNode.classList.contains('active')) {
+             key[0].parentNode.classList.remove('active'); 
+        } 
+        else { 
+            key[0].parentNode.classList.add('active'); 
+        }
+        upCase('CapsLock');
+
+    } else if(key[0].classList[0] == 'Backspace' || key[0].classList[0] == 'Delete') {
+        key[0].parentNode.classList.add('active');
+        if(key[0].classList[0] == 'Backspace') { 
+            textarea.value = textarea.value.slice(0,pos-1)+(textarea.value.slice(pos)); 
+            textarea.selectionStart = pos-1; 
+            textarea.selectionEnd = pos;
+        } else { 
+            textarea.value = textarea.value.slice(0,pos)+(textarea.value.slice(pos+1)); 
+            textarea.selectionStart = pos; 
+            textarea.selectionEnd = pos+1;}
+        setTimeout(() => key[0].parentNode.classList.remove("active"),200);
+
+    } else if(key[0].classList[0] == 'Enter') {
+        key[0].parentNode.classList.add('active');
+        textarea.value = textarea.value.slice(0,pos)+'\n'+(textarea.value.slice(pos));
+        textarea.selectionStart = pos+1; textarea.selectionEnd = pos+1;
+        setTimeout(() => key[0].parentNode.classList.remove("active"),200);
+
+    } else if(key[0].classList[0] == 'Tab') {
+        key[0].parentNode.classList.add('active');
+        text.value = text.value.slice(0,pos)+'\t'+(text.value.slice(pos));
+        setTimeout(() => key[0].parentNode.classList.remove("active"),200);
+        text.selectionStart = position+2; text.selectionEnd = position+2;
+
+    } else if(checkWord(key[0].classList[0])) {
+        key[0].parentNode.classList.add('active');
+        for(child of key) {
+            if(child.classList.contains('on')) {
+                for(innerChild of child.childNodes) {
+                    if(innerChild.classList.contains('down')) {
+                        textarea.value = textarea.value.slice(0,pos)+innerChild.innerHTML+(textarea.value.slice(pos));
+                        textarea.selectionStart = pos+1; textarea.selectionEnd = pos+1;
+                    }
                 }
             }
         }
+        setTimeout(() => key[0].parentNode.classList.remove("active"),200);
+
+    } else {
+        key[0].parentNode.classList.add('active');
+        setTimeout(() => key[0].parentNode.classList.remove("active"),200);
     }
-    setTimeout(() => key[0].parentNode.classList.remove("active"),350);
+}
+
+function upCase(event, key=false) { // Трансформация
+    if(event == 'CapsLock') {
+        textTransform();
+    } else if(key){
+        textTransform();
+        shiftUnPress = false;
+    }
 }
