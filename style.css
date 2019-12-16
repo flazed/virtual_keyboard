@@ -92,11 +92,6 @@ html, body, .wrapper {
     width: 50px;
 }
 
-.active {
-    background-color: #5571ee;
-    border-radius: 50px;
-}
-
 .key:hover {
     background: #585656;
 }
@@ -107,4 +102,9 @@ html, body, .wrapper {
 
 .alt:hover, .backspace:hover, .capslock:hover, .control:hover, .delete:hover, .enter:hover, .shift-left:hover, .shift-right:hover, .tab:hover, .windows:hover {
     background: #24395a;
+}
+
+.active {
+    background-color: #5571ee !important;
+    border-radius: 50px;
 }
