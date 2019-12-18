@@ -22,6 +22,7 @@ kb.id = 'keyboard'
 page.append(kb);
 
 let keyboard = document.querySelector('#keyboard');
+let textarea = document.querySelector('#text');
 
 // Создание клавиатуры
 for (rows of keys) { // Создание строки
@@ -30,12 +31,13 @@ for (rows of keys) { // Создание строки
     keyboard.append(row);
     let newRow = document.querySelectorAll('.row');
     for(key of rows) { // Создание кнопок в данной строке
+        let button
         if (key[0] == 'key') {
-            let button = document.createElement('div');
+            button = document.createElement('div');
             button.className = 'key';
             newRow[newRow.length-1].append(button); 
         } else {
-            let button = document.createElement('div');
+            button = document.createElement('div');
             button.className = 'key '+key[0];
             newRow[newRow.length-1].append(button);
         }
@@ -49,15 +51,28 @@ for (rows of keys) { // Создание строки
             }
             newKey[newKey.length-1].append(keySpan);
         }
-        spanInner(key);
+        spanInner(button, key);
     }
 }
 
-function spanInner(spanName) { // Заполнение кнопок
+function spanInner(button, spanName) { // Заполнение кнопок
     let span = document.querySelectorAll('.'+spanName[1]);
+    if(!(spanName[1] == 'ShiftLeft' || spanName[1] == 'ShiftRight')) {
+        button.onclick = function() {
+             clk(span); 
+        } 
+    } else {
+        button.addEventListener('mousedown', function(event) {
+            button.classList.add('active');
+            textTransform();
+        });
+        button.addEventListener('mouseup', function(event) {
+            button.classList.remove('active');
+            textTransform();
+        });
+    } 
     let langCount = 1;
-    for(elem of span) {
-        let keyInnerSpan = document.createElement('span');
+    for(elem of span) { 
         for(let k = 0; k < 2; k++) {
             let keyInnerSpan = document.createElement('span');            
             if(k == 0) {
@@ -74,5 +89,65 @@ function spanInner(spanName) { // Заполнение кнопок
 }
 
 function clk(key) {
+    let pos = textarea.selectionStart;
+    if(key[0].classList[0] == 'CapsLock') {
+        if(key[0].parentNode.classList.contains('active')) {
+             key[0].parentNode.classList.remove('active'); 
+        } 
+        else { 
+            key[0].parentNode.classList.add('active'); 
+        }
+        upCase('CapsLock');
 
+    } else if(key[0].classList[0] == 'Backspace' || key[0].classList[0] == 'Delete') {
+        key[0].parentNode.classList.add('active');
+        if(key[0].classList[0] == 'Backspace') { 
+            textarea.value = textarea.value.slice(0,pos-1)+(textarea.value.slice(pos)); 
+            textarea.selectionStart = pos-1; 
+            textarea.selectionEnd = pos;
+        } else { 
+            textarea.value = textarea.value.slice(0,pos)+(textarea.value.slice(pos+1)); 
+            textarea.selectionStart = pos; 
+            textarea.selectionEnd = pos+1;}
+        setTimeout(() => key[0].parentNode.classList.remove("active"),200);
+
+    } else if(key[0].classList[0] == 'Enter') {
+        key[0].parentNode.classList.add('active');
+        textarea.value = textarea.value.slice(0,pos)+'\n'+(textarea.value.slice(pos));
+        textarea.selectionStart = pos+1; textarea.selectionEnd = pos+1;
+        setTimeout(() => key[0].parentNode.classList.remove("active"),200);
+
+    } else if(key[0].classList[0] == 'Tab') {
+        key[0].parentNode.classList.add('active');
+        text.value = text.value.slice(0,pos)+'\t'+(text.value.slice(pos));
+        setTimeout(() => key[0].parentNode.classList.remove("active"),200);
+        text.selectionStart = position+2; text.selectionEnd = position+2;
+
+    } else if(checkWord(key[0].classList[0])) {
+        key[0].parentNode.classList.add('active');
+        for(child of key) {
+            if(child.classList.contains('on')) {
+                for(innerChild of child.childNodes) {
+                    if(innerChild.classList.contains('down')) {
+                        textarea.value = textarea.value.slice(0,pos)+innerChild.innerHTML+(textarea.value.slice(pos));
+                        textarea.selectionStart = pos+1; textarea.selectionEnd = pos+1;
+                    }
+                }
+            }
+        }
+        setTimeout(() => key[0].parentNode.classList.remove("active"),200);
+
+    } else {
+        key[0].parentNode.classList.add('active');
+        setTimeout(() => key[0].parentNode.classList.remove("active"),200);
+    }
+}
+
+function upCase(event, key=false) { // Трансформация
+    if(event == 'CapsLock') {
+        textTransform();
+    } else if(key){
+        textTransform();
+        shiftUnPress = false;
+    }
 }

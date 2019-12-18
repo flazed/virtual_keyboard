@@ -1,12 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans:700&display=swap');
 
 html, body, .wrapper {
+    position: absolute;
     padding: 0;
     margin: 0;
     background-color: #343434;
     width: 100%;
     /* font-family: Roboto,Segoe UI,"Tahoma, sans-serif"; */
     font-family: 'Noto Sans', sans-serif;
+    top: 50%;
+    transform: translateY(-60%);
 }
 
 #text {
@@ -50,8 +53,7 @@ html, body, .wrapper {
     background: #828282;
     border-radius: 3px;
     cursor: pointer;
-    /* user-select: none; */
-    transition: border-radius .2s,background .1s;
+    transition: border-radius .3s,background .2s;
 }
 
 .alt, .backspace, .capslock, .control, .delete, .enter, .shift-left, .shift-right, .tab, .windows {
@@ -90,11 +92,6 @@ html, body, .wrapper {
     width: 50px;
 }
 
-.active {
-    background-color: #5571ee;
-    border-radius: 50px;
-}
-
 .key:hover {
     background: #585656;
 }
@@ -105,4 +102,9 @@ html, body, .wrapper {
 
 .alt:hover, .backspace:hover, .capslock:hover, .control:hover, .delete:hover, .enter:hover, .shift-left:hover, .shift-right:hover, .tab:hover, .windows:hover {
     background: #24395a;
+}
+
+.active {
+    background-color: #5571ee !important;
+    border-radius: 50px;
 }
